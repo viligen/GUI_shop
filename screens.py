@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from authent import user_register
+
 
 def render_main_screen(window):
     tk.Button(window, text='Login', bg='light green', fg='white',
@@ -10,6 +12,23 @@ def render_main_screen(window):
 
 def clear_screen(window):
     [child.destroy() for child in window.winfo_children()]
+
+
+def render_login_screen(window):
+    clear_screen(window)
+
+    tk.Label(window, text='Please enter your username: ').grid(row=0, column=0)
+    username = tk.Entry(window)
+    username.grid(row=0, column=1)
+
+    tk.Label(window, text='Please enter your password: ').grid(row=1, column=0)
+    password = tk.Entry(window, show='*')
+    password.grid(row=1, column=1)
+
+    def on_login():
+        pass
+
+    tk.Button(window, text='Login', bg='dark green', fg='white', command=on_login).grid(row=3, column=1)
 
 
 def render_register_screen(window):
@@ -39,7 +58,10 @@ def render_register_screen(window):
         if password_value != confirmed_password_value:
             tk.Label(window, text='Passwords must match!', fg='red').grid(row=4, column=1)
         else:
-            pass
+            if user_register(username_value, email_value, password_value):
+                render_login_screen(window)
+            else:
+                tk.Label(window, text='Username is already registered!', fg='red').grid(row=4, column=1)
 
     tk.Button(window, text='Register', bg='dark green', fg='white',
               command=on_register_click).grid(row=5, column=1)
